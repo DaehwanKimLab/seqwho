@@ -880,6 +880,7 @@ class SeqWho_Index(object):
                   file=sys.stderr)
             exit(1)
 
+        written_fileset = set()
         outpath = out + "_plots"
         if not os.path.exists(outpath):
             os.mkdir(outpath)
@@ -939,9 +940,16 @@ class SeqWho_Index(object):
                        ax=ax4, 
                        cbar_kws = {'label' : "Prevelence"})
             mplt.tight_layout()
-            mplt.savefig(outpath + "/" + fn + "_statistics.png")
+
+            fname = os.path.basename(fn)
+            if fname in written_fileset:
+                fname = fn.lstrip('/').replace("/", "_")
+
+            mplt.savefig(outpath + "/" + fname + "_statistics.png")
             mplt.clf() # Clear Figure
             mplt.close('all')
+
+            written_fileset.add(fname)
 
             ## TODO add method of combining plots into same axis
 
