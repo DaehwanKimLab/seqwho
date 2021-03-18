@@ -27,12 +27,16 @@ SeqWho is written in Python 3 and will not function in Python 2. While it is cer
 + Conda 4.7<
 
 ## Install - (Mac/Linux/Windows)
-### Downloading SeqWho and Building HISAT2 from source
+### Downloading SeqWho and setting up conda environment
 This download example will place HISAT-genotype in your home (~) directory if you are using a linux system. 
 Change the ~ to whichever directory you desire if this is not the behavior you want.
 
 ```bash
 git clone https://github.com/DaehwanKimLab/seqwho ~/seqwho
+
+cd seqwho
+
+conda env create -f base_conda.yml
 ```
 
 ### Adding SeqWho to PATH
