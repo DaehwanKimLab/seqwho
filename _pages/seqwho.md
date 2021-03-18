@@ -1,7 +1,7 @@
 ---
 layout: page
-title: Main
-permalink: /main/
+title: HomePage
+permalink: /
 order: 1
 share: false
 ---
