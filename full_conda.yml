@@ -1,4 +1,4 @@
-name: py3_stats
+name: seqwho_v1
 channels:
   - defaults
 dependencies:
