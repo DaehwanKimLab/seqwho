@@ -958,7 +958,7 @@ class SeqWho_Index(object):
                 coll = []
                 for key, val in level.items():
                     if isinstance(val, list):
-                        val = ",".join(val)
+                        val = "-".join(val)
                     coll.append("%s %s: %s" % (name, key, val))
                 return '\t'.join(coll)
             except Exception as exc:
@@ -967,7 +967,7 @@ class SeqWho_Index(object):
             if isinstance(level, list):
                 try:
                     string += ";".join([
-                                    ",".join([str(l) for l in lev])
+                                    "-".join([str(l) for l in lev])
                                 for lev in level])
                     return string
                 except Exception as exc:
