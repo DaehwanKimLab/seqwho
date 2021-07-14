@@ -112,7 +112,7 @@ def populate_vectors(all_files,         # List of files to type
         print("> Running file %d: %s" % (cnt, fn), file=sys.stderr)
         cnt += 1
 
-        snag     = numlines * 40 if not building and False else numlines
+        snag     = numlines * 40 if not building else numlines
         isread   = False
         isqual   = False
         isfastq  = False
@@ -783,9 +783,13 @@ class SeqWho_Index(object):
         self.vectors = vects
 
     def run_vector_population(self):
+        numlines = 100000
+        if "NumberLine" in self.keys:
+            numlines = self.keys["NumberLine"]
         # try:
         self.vectors, self.stats = populate_vectors(self.vectors.get_fnames(),
-                                                    self.vectors)
+                                                    self.vectors,
+                                                    numlines)
         #     return True
         # except Exception as exc:
         #     print("Unexpected Error:", exc,

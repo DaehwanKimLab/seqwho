@@ -107,6 +107,7 @@ def build_input(h2_ridx,
                 mask, 
                 k_size, 
                 repk,
+                numlines,
                 outfn):
     # Build Repeats and master index
     print("Building")
@@ -133,11 +134,12 @@ def build_input(h2_ridx,
     all_files = glob.glob("*fastq.gz")
     random.shuffle(all_files)
 
-    index, stats = sqwho.populate_vectors(all_files, index, building=True)
+    index, stats = sqwho.populate_vectors(all_files, index, numlines, building=True)
     index.purge_kmers()
 
     labels, matrix, keys = index.set_ix()
     keys["index name"] = outfn
+    keys["NumberLine"] = numlines
 
     return(save_matrix(labels, 
                        matrix, 
@@ -152,12 +154,14 @@ def build_model(repfn,
                 mask,
                 ksize,
                 repsize,
+                numlines,
                 outfn):
     keyfn, labelfn, matrixfn = build_input(repfn,
                                            labelfn,
                                            mask,
                                            ksize,
                                            repsize,
+                                           numlines,
                                            outfn)
 
     ## CB - DEBUG - If files are already built using default file names
@@ -305,6 +309,10 @@ if __name__ == '__main__':
                         dest = 'repsize',
                         default=31,
                         help = 'Size of repeat kmers to use (default: 31)') 
+    parser.add_argument('-n', '--number_of_lines',
+                        dest = 'numlines',
+                        default=100000,
+                        help = 'Number of lines to draw from the files. (Default: 100000')    
     parser.add_argument('-o', '--out',
                         dest="outfn",
                         default="SeqWho.ix",
@@ -355,4 +363,5 @@ if __name__ == '__main__':
                 mask,
                 args.ksize,
                 args.repsize,
+                args.numlines,
                 args.outfn)
