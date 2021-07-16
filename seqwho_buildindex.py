@@ -303,14 +303,17 @@ if __name__ == '__main__':
                                 you want to ommit')                                                 
     parser.add_argument('-k', '--ksize',
                         dest = 'ksize',
+                        type = int,
                         default=5,
                         help = 'Size of full kmer vector (default: 5)')
     parser.add_argument('-j', '--repeat-kmer',
                         dest = 'repsize',
+                        type = int,
                         default=31,
                         help = 'Size of repeat kmers to use (default: 31)') 
     parser.add_argument('-n', '--number_of_lines',
                         dest = 'numlines',
+                        type = int,
                         default=100000,
                         help = 'Number of lines to draw from the files. (Default: 100000')    
     parser.add_argument('-o', '--out',
