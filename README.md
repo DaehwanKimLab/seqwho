@@ -4,6 +4,16 @@ This is the official SeqWho Repository.
 You can find the Documentation for SeqWho at:
 https://daehwankimlab.github.io/seqwho/
 
+## Install
+Requirements:
+python 3+
+conda 4.7+
+
+```
+conda env create -f base_conda.yml
+```
+
+## Index
 SeqWho.ix : SeqWho Index - Species: MM HS - Libraries: Amplicon ChIP-Seq WGS WES miRNAseq RNAseq Bisulfite-seq DNase-seq ATAC-seq
 https://cloud.biohpc.swmed.edu/index.php/s/sP48taKmymSkJBM/download
 

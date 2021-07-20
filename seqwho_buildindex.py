@@ -134,7 +134,11 @@ def build_input(h2_ridx,
     all_files = glob.glob("*fastq.gz")
     random.shuffle(all_files)
 
-    index, stats = sqwho.populate_vectors(all_files, index, numlines, building=True)
+    index, stats = sqwho.populate_vectors(all_files = all_files, 
+                                          index     = index, 
+                                          numlines  = numlines,
+                                          enhQual   = False,
+                                          building  = True)
     index.purge_kmers()
 
     labels, matrix, keys = index.set_ix()

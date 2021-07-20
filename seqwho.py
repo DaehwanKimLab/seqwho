@@ -102,10 +102,10 @@ def alignReads(genome, read_chunk, longest):
     print(readsrecovered, totalreads)
 
 
-def run_call(fnindex, files, out):
+def run_call(fnindex, files, enhQual, out):
     sqidx = sqwho.SeqWho_Index(fnindex)
     sqidx.init_vectors(files)
-    success = sqidx.run_vector_population()
+    success = sqidx.run_vector_population(enhQual)
 
     if not success:
         print("Error loading and running vectors. Exiting!")
@@ -126,7 +126,10 @@ if __name__ == '__main__':
                         nargs    = '+',
                         required = True,
                         help     = 'Files to type')
-
+    parser.add_argument('-q', '--quality',
+                        dest     = 'enhancedQual',
+                        action   = "store_true",
+                        help     = 'Enhance quality measures by reading 10x more FASTQ(A) data')
     parser.add_argument('-o', '--out',
                         dest     = 'out',
                         type     = str,
@@ -155,6 +158,10 @@ if __name__ == '__main__':
             print("%s not found" % f)
             exit(0)
 
+    if args.out[-1] == "/":
+        args.out += "SeqWho_call"
+
     run_call(args.idx, 
              args.files,
+             args.enhancedQual,
              args.out)

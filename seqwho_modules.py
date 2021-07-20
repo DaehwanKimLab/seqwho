@@ -89,7 +89,8 @@ def tag_search(hashls, hashix, string):
 def populate_vectors(all_files,         # List of files to type
                      index,             # Pass index into function
                      numlines = 100000, # Number of lines to read for index
-                     building = False): # Read 40x more reads if not building  
+                     enhQual  = False,  # Read 40x more reads if not building  
+                     building = False): #
     cnt   = 1
     stats = {}
     for fn in all_files:
@@ -112,7 +113,9 @@ def populate_vectors(all_files,         # List of files to type
         print("> Running file %d: %s" % (cnt, fn), file=sys.stderr)
         cnt += 1
 
-        snag     = numlines if building or True else numlines * 40 # Not ready yet for the 40 fold increase
+        snag     = numlines 
+        if not building and enhQual:
+            snag = numlines * 40
         isread   = False
         isqual   = False
         isfastq  = False
@@ -785,14 +788,16 @@ class SeqWho_Index(object):
 
         self.vectors = vects
 
-    def run_vector_population(self):
+    def run_vector_population(self, enhQual = False):
         numlines = 100000
         if "NumberLine" in self.keys:
             numlines = self.keys["NumberLine"]
         # try:
-        self.vectors, self.stats = populate_vectors(self.vectors.get_fnames(),
-                                                    self.vectors,
-                                                    numlines)
+        self.vectors, self.stats = populate_vectors(all_files = self.vectors.get_fnames(),
+                                                    index     = self.vectors,
+                                                    numlines  = numlines,
+                                                    enhQual   = enhQual,
+                                                    building  = False)
         #     return True
         # except Exception as exc:
         #     print("Unexpected Error:", exc,
@@ -893,6 +898,9 @@ class SeqWho_Index(object):
             os.mkdir(outpath)
 
         for fn, stat in self.stats.items():
+            filePrefix = fn
+            if "/" in fn:
+                filePrefix = fn.split("/")[-1]
             if "Error" in stat:
                 continue
 
@@ -947,7 +955,7 @@ class SeqWho_Index(object):
                        ax=ax4, 
                        cbar_kws = {'label' : "Prevelence"})
             mplt.tight_layout()
-            mplt.savefig(outpath + "/" + fn + "_statistics.png")
+            mplt.savefig(outpath + "/" + filePrefix + "_statistics.png")
             mplt.clf() # Clear Figure
             mplt.close('all')
 
