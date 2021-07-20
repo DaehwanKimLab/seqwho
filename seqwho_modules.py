@@ -112,7 +112,7 @@ def populate_vectors(all_files,         # List of files to type
         print("> Running file %d: %s" % (cnt, fn), file=sys.stderr)
         cnt += 1
 
-        snag     = numlines * 40 if not building else numlines
+        snag     = numlines if building or True else numlines * 40 # Not ready yet for the 40 fold increase
         isread   = False
         isqual   = False
         isfastq  = False
@@ -605,8 +605,9 @@ class IxVector(RepVector):
         labs  = [] 
         vects = []
         for fn, ix in self.fns.items():
-            if self.buildmode:
-                labs.append([self.labkey[x] for x in self.flabels[fn]])
+            if not matrix[ix]:
+                print("Error in file %s. No repeats found" % fn)
+                continue
 
             if norm:
                 mx = self._normalize_ix(matrix[ix])
@@ -615,6 +616,8 @@ class IxVector(RepVector):
 
             kmx = self.k_ix[ix]
 
+            if self.buildmode:
+                labs.append([self.labkey[x] for x in self.flabels[fn]])
             vects.append(kmx + mx)
 
         if self.buildmode:
@@ -811,16 +814,35 @@ class SeqWho_Index(object):
 
             newadd     = []
             confidence = "high"
+
+            specMain = []
+            libMain = []
             for j in range(len(self.random_forests)):
                 model = self.random_forests[j]
 
                 try:
+                    resprob = model.predict_proba(mtx[i].reshape(1, -1))
                     res = model.predict(mtx[i].reshape(1, -1))
+
+                    if j < 2:
+                        specMain.append(resprob)
+                    else:
+                        libMain.append(resprob)
+
                     if res[0] == 1:
                         newadd.append(self.convkey[str(j)])
                 except:
                     newadd.append("list_error")
                     break
+
+            specAlt  = self.full_random_forests[0].predict_proba(mtx[i].reshape(1, -1))
+            libAlt   = self.full_random_forests[1].predict_proba(mtx[i].reshape(1, -1))
+            specMain = np.array([[x[0][1] for x in specMain]])
+            libMain  = np.array([[x[0][1] for x in libMain]]) 
+
+            print(specMain * specAlt)
+            print(libMain * libAlt)
+            print(np.matmul(specMain, libMain))
 
             if len(newadd) != 2:
                 wgt = [0 for x in newadd]
