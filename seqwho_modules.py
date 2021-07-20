@@ -806,72 +806,54 @@ class SeqWho_Index(object):
         assert len(fns) == len(mtx)
 
         callresults = []
+        nspecies = self.keys["label metadata"]["nspecies"]
         for fn, i in fns.items():
             if "Error" in self.stats[fn]:
                 result = self._get_file_table(fn)
                 callresults.append(result)
                 continue
 
-            newadd     = []
-            confidence = "high"
-
+            newadd   = []
             specMain = []
-            libMain = []
+            libMain  = []
+            goodfile = True
             for j in range(len(self.random_forests)):
                 model = self.random_forests[j]
 
                 try:
                     resprob = model.predict_proba(mtx[i].reshape(1, -1))
-                    res = model.predict(mtx[i].reshape(1, -1))
-
-                    if j < 2:
+                    if j < nspecies:
                         specMain.append(resprob)
                     else:
                         libMain.append(resprob)
 
-                    if res[0] == 1:
-                        newadd.append(self.convkey[str(j)])
                 except:
                     newadd.append("list_error")
+                    goodfile = False
                     break
 
-            specAlt  = self.full_random_forests[0].predict_proba(mtx[i].reshape(1, -1))
-            libAlt   = self.full_random_forests[1].predict_proba(mtx[i].reshape(1, -1))
-            specMain = np.array([[x[0][1] for x in specMain]])
-            libMain  = np.array([[x[0][1] for x in libMain]]) 
+            matrixEntry = {}
+            if goodfile:
+                specAlt  = self.full_random_forests[0].predict_proba(mtx[i].reshape(1, -1))
+                libAlt   = self.full_random_forests[1].predict_proba(mtx[i].reshape(1, -1))
+                specMain = np.array([[x[0][1] for x in specMain]]) * specAlt
+                libMain  = np.array([[x[0][1] for x in libMain]])  * libAlt
+                fullMtx  = np.matmul(specMain.transpose(), libMain)
 
-            print(specMain * specAlt)
-            print(libMain * libAlt)
-            print(np.matmul(specMain, libMain))
+                newadd.append(self.convkey[str(np.argmax(np.max(fullMtx, axis=1)))])
+                newadd.append(self.convkey[str(nspecies + np.argmax(np.max(fullMtx, axis=0)))])
+                newadd.append(np.round(np.max(fullMtx), decimals=3))
 
-            if len(newadd) != 2:
-                wgt = [0 for x in newadd]
-                for j in range(len(self.full_random_forests)):
-                    model = self.full_random_forests[j]
+                matrixEntry = {}
+                for key, val in self.keys["label key"].items():
+                    if val < nspecies:
+                        matrixEntry[key] = np.round(specMain[0][val], decimals=3)
+                    else:
+                        matrixEntry[key] = np.round(libMain[0][val - nspecies],decimals=3)
 
-                    try:
-                        res = model.predict(mtx[i].reshape(1, -1))
-                        res = int(res[0])
-                        if j == 1:
-                            res += self.keys["label metadata"]["nspecies"]
-                        
-                        callpart = self.convkey[str(res)]
-                        if callpart not in newadd:
-                            newadd.append(callpart)
-                            wgt.append(0)
-                            confidence = "low:"
-                        else:
-                            wgt[newadd.index(callpart)] += 1
+                print("%s\t%s\t%s\t%s" % (fn, newadd[0], newadd[1], str(newadd[2])))
 
-                    except:
-                        newadd.append("list_error")
-                        confidence = "NA"
-                        break
-
-                if confidence != "NA":
-                    confidence = confidence + ":".join([str(x) for x in wgt])
-
-            self._add_call_to_stats(fn, newadd, confidence)
+            self._add_call_to_stats(fn, newadd, matrixEntry)
             result = self._get_file_table(fn)
             callresults.append(result)
 
@@ -1016,22 +998,20 @@ class SeqWho_Index(object):
         report = "\t".join(report)
         return fn + "\t" + report
 
-    def _add_call_to_stats(self, fn, call, confidence):
+    def _add_call_to_stats(self, fn, call, mtx):
         if "Call" in self.stats[fn]:
             print("Error call already associated with a file",
                   file=sys.stderr)
             exit(1)
 
-        self.stats[fn]['Call'] = {"Confidence" : confidence,
-                                  "Species"    : [],
-                                  "Seq Type"   : []}
-        for c in call:
-            if c == "list_error":
-                self.stats[fn]["Call"] = "No Call"
-            elif c in self.keys["label metadata"]["species"]:
-                self.stats[fn]['Call']["Species"].append(c)
-            else:
-                assert c in self.keys["label metadata"]["type"], "%s call not found" % c
-                self.stats[fn]['Call']["Seq Type"].append(c)
+        if "list_error" in call:
+            self.stats[fn]["Call"] = "No Call"
+            return
+
+        self.stats[fn]['Call'] = {"Species" : call[0],
+                                  "Library" : call[1],
+                                  "Maximum Likelihood Estimate" : call[2],
+                                  "MLE Matrix" : mtx}
+
 
 
