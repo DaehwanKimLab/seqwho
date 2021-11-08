@@ -16,7 +16,7 @@ Please read https://daehwankimlab.github.io/seqwho/manual/ for more details.
 
 | Species | Libraries | Index |
 | --- | --- | --- |
-| Human, Mouse | Amplicon, ChIP-Seq, WGS, WES, miRNA-Seq, RNA-Seq, Bisulfite-Seq, DNase-Seq, ATAC-Seq | [Index]( https://cloud.biohpc.swmed.edu/index.php/s/sP48taKmymSkJBM/download)<sub>([md5sum](https://cloud.biohpc.swmed.edu/index.php/s/9bk57S65LycK5ts/download))</sub> | 
+| Human, Mouse | Amplicon, ChIP-Seq, WGS, WES, miRNA-Seq, RNA-Seq, Bisulfite-Seq, DNase-Seq, ATAC-Seq | [Index]( https://cloud.biohpc.swmed.edu/index.php/s/sP48taKmymSkJBM/download)<sub>([md5sum](https://cloud.biohpc.swmed.edu/index.php/s/9bk57S65LycK5ts/download))</sub><br>[Training File List](https://cloud.biohpc.swmed.edu/index.php/s/zmZ8AMfNcYaAB7y/download)<br>[Testing File List](https://cloud.biohpc.swmed.edu/index.php/s/t9SSQLgjzYxXSZd/download) | 
 | Human, Mouse, Rattus norvegicus | ChIP-Seq, WGS, RNA-Seq | [Index](https://cloud.biohpc.swmed.edu/index.php/s/B6dLibRmjqkWbNY/download)<sub>([md5sum](https://cloud.biohpc.swmed.edu/index.php/s/GcCyaFqeaQSCsTd/download))</sub><br>[Training File List](https://cloud.biohpc.swmed.edu/index.php/s/fRyKqyraxiXWeLF/download)<br>[Testing File List](https://cloud.biohpc.swmed.edu/index.php/s/G6AJetoD9JHQzZx/download) |
 | Human, Mouse, Arabidopsis thaliana, Caenorhabditis elegans, Drosophila melanogaster, Saccharomyces cerevisiae | ChIP-Seq, WGS, RNA-Seq | [Index](https://cloud.biohpc.swmed.edu/index.php/s/ys6Qa87cY2HyJEJ/download)<sub>([md5sum](https://cloud.biohpc.swmed.edu/index.php/s/7AZdAHEc6iRBYSP/download))</sub><br>[Training File List](https://cloud.biohpc.swmed.edu/index.php/s/gZzS3GKgar4SraH/download)<br>[Testing File List](https://cloud.biohpc.swmed.edu/index.php/s/Hi3GEj6PFaZ9FeN/download)|
 
