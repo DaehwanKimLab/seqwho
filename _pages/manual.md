@@ -28,7 +28,7 @@ SeqWho is written in Python 3 and will not function in Python 2. While it is cer
 
 ## Install - (Mac/Linux/Windows)
 ### Downloading SeqWho and setting up conda environment
-This download example will place HISAT-genotype in your home (~) directory if you are using a linux system. 
+This download example will place SeqWho in your home (~) directory if you are using a linux system. 
 Change the ~ to whichever directory you desire if this is not the behavior you want.
 
 ```bash
@@ -40,7 +40,7 @@ conda env create -f base_conda.yml
 ```
 
 ### Adding SeqWho to PATH
-Add the above directory (hisat-genotype) to your PATH environment variable
+Add the above directory (SeqWho) to your PATH environment variable
 (e.g. ~/.bashrc) to make the binaries built above and other python scripts
 available everywhere:
 
@@ -53,6 +53,12 @@ $ export PATH=~/seqwho:$PATH
 # Running SeqWho 
 
 We have separated this section into model building and file classification
+
+Please activate the conda environment before running SeqWho
+
+```bash
+$ conda activate seqwho_v1
+```
 
 ## Model Building
 Usage:
@@ -96,7 +102,15 @@ $ seqwho_buildindex.py -r [REPEAT FILES] -l [LABEL FILE] [OPTIONS]
 * **\-v / \--verbose** | *Default* : `FALSE`
 > Show output messages
 
+### Generate Repeat Files for seqwho_buildindex.py
+To generate the repeat files for seqwho_buildindex.py, you need to install [HISAT2] and passing the genome file to `hisat2-repeat`.  
+Example:
+```bash
+$ hisat2-repeat mouse_genome.fa mouse
+```
+The file `mouse.rep.100-65535.seed` is the repeat file for seqwho_buildindex.py `-r` option.
 
+[HISAT2]:https://daehwankimlab.github.io/hisat2/main/
 ## File Calling
 Usage:
 ```bash
@@ -109,9 +123,10 @@ $ seqwho.py -x [SEQWHO INDEX] -f [FILE(S) ... ] [OPTIONS]
 > Path to SeqWho index file and name of file
 > Example: `-x SeqWho.ix`
 
-* **\-f / \--files** | *Default* : *none* 
-> Comma-separated list of files, individual file, or pattern matching syntax to classify
-> Example: `-f file1.fq.gz,file2.fq.gz` or `-f ~/files/*.fq.gz`
+* **\-f / \--files** | *Default* : *none*
+> Comma-separated list of files, individual file, or pattern matching syntax to classify. The files can be gzipped or uncompressed.
+> For paired-end reads, please treat them as single-end reads.
+> Example: `-f file1.fq.gz,file2.fq.gz` or `-f ~/files/*.fq`
 
 ### Optional Arguments
 
