@@ -113,7 +113,7 @@ def run_call(fnindex, files, out):
 
     sqidx.run_vector_test(out)
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser(
         description='Seq-Who: Full Version Beta-1.0.0')
     parser.add_argument('-x', '--index',
@@ -158,3 +158,8 @@ if __name__ == '__main__':
     run_call(args.idx, 
              args.files,
              args.out)
+
+    return 0
+
+if __name__ == '__main__':
+    sys.exit(main())

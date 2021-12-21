@@ -280,8 +280,7 @@ def build_model(repfn,
 
     # tars.close()
 
-
-if __name__ == '__main__':
+def main():
     parser = ArgumentParser(
         description='Build SeqWho index for classifying sequence file types')
     parser.add_argument('-r', '--repeats',
@@ -365,3 +364,8 @@ if __name__ == '__main__':
                 args.repsize,
                 args.numlines,
                 args.outfn)
+
+    return 0
+
+if __name__ == '__main__':
+    sys.exit(main())
