@@ -124,9 +124,9 @@ $ seqwho.py -x [SEQWHO INDEX] -f [FILE(S) ... ] [OPTIONS]
 > Example: `-x SeqWho.ix`
 
 * **\-f / \--files** | *Default* : *none*
-> Comma-separated list of files, individual file, or pattern matching syntax to classify. The files can be gzipped or uncompressed.
+> Space-separated list of files, individual file, or pattern matching syntax to classify. The files can be gzipped or uncompressed.
 > For paired-end reads, please treat them as single-end reads.
-> Example: `-f file1.fq.gz,file2.fq.gz` or `-f ~/files/*.fq`
+> Example: `-f file1.fq.gz file2.fq.gz` or `-f ~/files/*.fq`
 
 ### Optional Arguments
 
