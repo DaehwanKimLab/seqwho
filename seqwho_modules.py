@@ -892,6 +892,9 @@ class SeqWho_Index(object):
             if "Error" in stat:
                 continue
 
+            if "/" in fn:
+                fn = fn.split("/")[-1]
+
             sb.set_style('whitegrid')
             sb.set(font_scale=3)
             fig, (ax1, ax2, ax3, ax4) = mplt.subplots(4,1,figsize=(25,30))
