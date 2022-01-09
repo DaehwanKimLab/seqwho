@@ -4,9 +4,19 @@ then
     echo "conda could not be found, please install this first";
     exit
 fi
+
+# check conda version
+condaversion=$(conda --version 2>&1 | awk -F ' ' '{print $2}')
+condamajor=$(echo $condaversion | awk -F '.' '{print $1}')
+condaminor=$(echo $condaversion | awk -F '.' '{print $2}')
+if (( $condamajor < 4 || $condaminor < 5 )); then
+    echo "your conda version seems to be too old. Please update Conda.";
+    exit
+fi
+
 echo "Have you already downloaded SeqWho from Github? [Y/N]: "
 read resp1;
-while [ $resp1 != "Y" ] && [ $resp1 != "N" ];
+while [ "$resp1" != "Y" ] && [ "$resp1" != "N" ];
 do
 echo "Have you already downloaded SeqWho from Github? [Y/N]: "
 read resp1;
@@ -74,17 +84,16 @@ if [[ ! -f $datadir/verify_seqwho_install_data.tar.gz ]]; then
 	cp verify_seqwho_install_data.tar.gz "$datadir/";
 fi; 
 cd "$datadir/"
-gunzip verify_seqwho_install_data.tar.gz; 
-tar -xvf verify_seqwho_install_data.tar
+tar zxvf verify_seqwho_install_data.tar.gz
 cd verify_seqwho_install_data; 
 
 echo "";
 echo "CONDA Output to Follow, NOTE: if you get CondaValueError here this is okay, it just means you have already created the seqwho environment";
 echo "-----------------------------------------------------------------------------------------";
 
-source $(which conda | sed "s/\/bin\/conda/\/etc\/profile.d\/conda.sh/");
+condabase=$(conda info --base)
+source ${condabase}/etc/profile.d/conda.sh
 conda env create -f $seqwhodir/base_conda.yml > /dev/null
-#conda init bash;
 conda activate seqwho_v1
 
 echo "-----------------------------------------------------------------------------------------";
@@ -93,7 +102,7 @@ echo "";
 
 echo "Would you like to test the SeqWho index building step (Requires >= 32 GB RAM, might take a while)? [Y/N]"; 
 read resp3; 
-while [ $resp3 != "Y" ] && [ $resp3 != "N" ]; do 
+while [ "$resp3" != "Y" ] && [ "$resp3" != "N" ]; do
 echo "Invalid response.  Test index building phase? [Y/N/^C to exit]: " 
 read resp3;
 done; 
@@ -120,7 +129,7 @@ fi
 
 echo "Would you like to test the SeqWho file calling capabilities? [Y/N/^C to exit]: " 
 read resp4; 
-while [ $resp4 != "Y" ] && [ $resp4 != "N" ]; do 
+while [ "$resp4" != "Y" ] && [ "$resp4" != "N" ]; do
 echo "Invalid response.  Test file calling phase? [Y/N/^C to exit]: " 
 read resp4; 
 done; 
