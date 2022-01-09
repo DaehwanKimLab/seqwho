@@ -20,9 +20,9 @@ if [ $resp1 == "Y" ]; then
 	echo "That is not a directory (or absolute path) on your computer, Please input the directory of seqwho [^C to exit]: "; 
 	read seqwhodir;
 	done 
-	while [[ ! -f "$seqwhodir/seqwho.py" ]] || [[ ! -f "$seqwhodir/seqwho_buildindex.py" ]] || [[ ! -f "$seqwhodir/base_conda.yml" ]] || [[ ! -f "$seqwhodir/full_conda.yml" ]] || [[ ! -f "$seqwhodir/seqwho_modules.py" ]]; do 
-	echo "The directory does not contain valid seqwho scripts, Please input the directory of seqwho [^C to exit]: "; 
-	read seqwhodir;
+	while [[ ! -f "$seqwhodir/seqwho_lib/seqwho.py" ]] || [[ ! -f "$seqwhodir/seqwho_lib/seqwho_buildindex.py" ]] || [[ ! -f "$seqwhodir/base_conda.yml" ]] || [[ ! -f "$seqwhodir/full_conda.yml" ]] || [[ ! -f "$seqwhodir/seqwho_lib/seqwho_modules.py" ]]; do
+	echo "The directory does not contain valid seqwho scripts, Please input the directory of seqwho [^C to exit]: "
+	read seqwhodir
 	done
 	echo "SeqWho Directory Located: $seqwhodir"; 
 fi 
@@ -46,12 +46,12 @@ fi
 		installdir="";
 		echo "We will download SeqWho from Github, please provide a directory to download to: (note this will not work with relative file paths)"; 
 		read installdir;
-		while [[ ! -d $installdir ]]; do 
-			echo "Invalid directory, please provide alternative: ";
-			read installdir; 
+		while [[ -a $installdir ]]; do
+			echo "Invalid directory, please provide alternative: "
+			read installdir
 		done 
-		git clone https://github.com/DaehwanKimLab/seqwho $installdir; 
-		seqwhodir="$installdir/seqwho";
+		git clone https://github.com/DaehwanKimLab/seqwho $installdir
+		seqwhodir="$installdir"
 	fi
 fi
 
@@ -84,8 +84,8 @@ echo "--------------------------------------------------------------------------
 
 source $(which conda | sed "s/\/bin\/conda/\/etc\/profile.d\/conda.sh/");
 conda env create -f $seqwhodir/base_conda.yml > /dev/null
-conda init bash;
-conda activate seqwho_v1; 
+#conda init bash;
+conda activate seqwho_v1
 
 echo "-----------------------------------------------------------------------------------------";
 echo "End of CONDA Output";
@@ -103,12 +103,12 @@ if [ $resp3 == "Y" ]; then
 	tar -xvf build-seqwho-index.tar
 	cd build-seqwho-index
 	echo "Creating Index - This will Take a while, progress is reported here: "; 
-	$seqwhodir/seqwho_buildindex.py -r human_repeats.txt,mouse_repeats.txt -l train.labs > index.build.log; 
+	$seqwhodir/seqwho_lib/seqwho_buildindex.py -r human_repeats.txt,mouse_repeats.txt -l train.labs > index.build.log;
 	if [[ -f SeqWho.ix ]]; then 
 		echo "Index file succesfully built as SeqWho.ix"; 
 	fi
 	if [[ ! -f SeqWho.ix ]]; then 
-		echo "Index file could not be built, please try to reinstall for building, will use pre-built for call-testing"; 
+		echo "Index file could not be built, please try to reinstall for building, will use pre-built for call-testing"
 		resp3="N";
 	fi   
 	cd ..
@@ -138,10 +138,10 @@ if [ $resp4 == "Y" ]; then
 	tar -xvf call-test-files.tar
 	cd call-test-files/ 
 	if [ $resp3 == "Y" ]; then 
-		$seqwhodir/seqwho.py -x "../build-seqwho-index/SeqWho.ix" -f *.gz > file.call.log; 
+		$seqwhodir/seqwho_lib/seqwho.py -x "../build-seqwho-index/SeqWho.ix" -f *.gz > file.call.log
 	fi
 	if [ $resp3 == "N" ]; then 
-		$seqwhodir/seqwho.py -x SeqWho_prebuilt.ix -f *.gz > file.call.log; 
+		$seqwhodir/seqwho_lib/seqwho.py -x SeqWho_prebuilt.ix -f *.gz > file.call.log
 	fi 
 fi
 if [ $resp3 == "Y" ]; then 
