@@ -9,7 +9,7 @@ fi
 condaversion=$(conda --version 2>&1 | awk -F ' ' '{print $2}')
 condamajor=$(echo $condaversion | awk -F '.' '{print $1}')
 condaminor=$(echo $condaversion | awk -F '.' '{print $2}')
-if (( $condamajor < 4 || $condaminor < 5 )); then
+if (( $condamajor < 4 || ($condamajor == 4 && $condaminor < 7))); then
     echo "your conda version seems to be too old. Please update Conda.";
     exit
 fi
