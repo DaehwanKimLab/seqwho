@@ -23,10 +23,23 @@ SeqWho has two major functions: 1) model training 2) file classification. In bot
 SeqWho is written in Python 3 and will not function in Python 2. While it is certainly possible to manually set-up Python 3 to use SeqWho, we recommend using a conda environment built from the environment.yml included with SeqWho for optimal performance. This is the method we will describe here. 
 
 ### Basic Recommended Requirements
-+ Python 3<
-+ Conda 4.7<
++ Python >3
++ Conda >4.7
 
 ## Install - (Mac/Linux/Windows)
+SeqWho provides two installation method.
+ - PIP
+ - Downloading SeqWho from GitHub
+
+### PIP
+We recommend installing SeqWho in a separate conda environment.
+
+```bash
+conda create -n seqwho_v1 python=3.7 pip
+conda activate seqwho_v1
+pip install seqwho
+```
+
 ### Downloading SeqWho and setting up conda environment
 This download example will place SeqWho in your home (~) directory if you are using a linux system. 
 Change the ~ to whichever directory you desire if this is not the behavior you want.
@@ -39,13 +52,13 @@ cd seqwho
 conda env create -f base_conda.yml
 ```
 
-### Adding SeqWho to PATH
+#### Adding SeqWho to PATH
 Add the above directory (SeqWho) to your PATH environment variable
 (e.g. ~/.bashrc) to make the binaries built above and other python scripts
 available everywhere:
 
 ```bash
-$ export PATH=~/seqwho:$PATH
+$ export PATH=~/seqwho/seqwho_lib:$PATH
 ```
 
 ---
