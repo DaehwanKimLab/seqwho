@@ -149,8 +149,11 @@ $ seqwho.py -x [SEQWHO INDEX] -f [FILE(S) ... ] [OPTIONS]
 
 # Results and output files
 SeqWho generates three kinds of files:
+
 1) PNG containing four plots, one with single nucleotide quality core counts, the second with averag quality score by position, the third with cound of reads with a givent length, and the final a heat map of nucleotide frequency by position in the read.
+
 2) A Json file with all of the data neede to generate the plots in 1, and the following data:
+
  - Estimated Read Number: Number of read estimated to be in the file
  - File format: File format (fasta or fastq)
  - Biased 5' end 6-mers": Any 6-mers at the 5' end that are more frequent than expected by chance
@@ -163,6 +166,8 @@ SeqWho generates three kinds of files:
  - Reads Omitted: Number of reads filtered because of low quality or are poly-A
  - Perc Passed: Percent of reads that passes to model testing
  - Call: Call of the file
+
+
 3) TSV with all of the information in 2 above
 
 A PNG is generated for each file tested and dropped into a separate results folder  while only one JSON and TSV file are generated with all of the results imbedded.
